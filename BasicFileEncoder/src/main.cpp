@@ -6,216 +6,194 @@ Windows.h
 #include "headers\pch.h"
 #include <cstring>
 #include "headers\FileManager.h"
-#include "headers\decoder.h"
-#include "headers\encoder.h"
-
+#include "headers\encryptionTech.h"
 #ifdef BFE_x64
 #define bits "x64"
 #endif
 #ifdef BFE_x86
 #define bits "x86"
 #endif
+
 int main()
 {
-	//function variable decloration
-	std::string s_index, en_de, fileLoc, fileName;
-	int index = 0; //the number that the file will be multiplied by.
-	unsigned char mode; //if 0, then encode; if 1, then decode
-	const char* cs_string;
-	bool back = false;
+	//variable decloration
+	unsigned char mode;
+	unsigned char method;
+	std::string en_de, fileLoc, fileName, s_mode, s_method;
 	unsigned char* finalFileBuf, *interFileBuf; //output file buffer, intermediate file buffer
-	unsigned long finalFileLength, interFileLength; //output file buffer length, intermediate file buffer length
+	unsigned long long finalFileLength, interFileLength; //output file buffer length, intermediate file buffer length
 	OFSTRUCT fileStruct;
+	bool moveOn;
+	unsigned char nameLength;
+	const char* outputName;
 
 	//startup text
-	{	
+	{
 		std::cout << "Hello World" << std::endl;
-		std::cout << "Encode It! "<< bits <<" v1.0" << std::endl;
+		std::cout << "Encode It! " << bits << " v1.1" << std::endl;
 		std::cout << "Developed by Tyler Wang." << std::endl;
 		std::cout << "All rights reserved. This is a free software, reselling is PROHIBITED" << std::endl << std::endl;
 	}
 
 	//Input Phase
+	std::cout << "Enter encryption methodod (Please enter number next to encryption methodod's name):" << std::endl << std::endl 
+		<< "\tShift Code (1)" << std::endl;
+	const char* cs_method;
+methododCreation:
+	do
 	{
-		std::cout << "Enter file name" << std::endl;
-		do
+		std::getline(std::cin, s_method);
+		moveOn = false;
+		cs_method = s_method.c_str();
+		for (int a = 0; a < s_method.length(); a++)
 		{
-			std::getline(std::cin, fileName);
-			fileLoc = "input\\" + fileName;
-			if (OpenFile((LPCSTR)fileLoc.c_str(), &fileStruct, OF_EXIST) != HFILE_ERROR)
-				break;
-			std::cout << "Please enter a valid file name reletive to the input directory" << std::endl;
-		} while (true);
-		std::cout << "Enter encoding index (between -9 and 99 enclusive)" << std::endl;
-	enterIndex:
-		do
-		{
-			std::getline(std::cin, s_index);
-			if ((s_index.length() < 3))
-				break;
-			else
-				std::cout << "Must be a number between -9 and 99 enclusive" << std::endl;
-		} while (true);
-		if (back)
-			goto indexConv;
-		std::cout << "Enter mode (type \"D\" for decode and \"E\" for encode)" << std::endl;
-		do
-		{
-			std::getline(std::cin, en_de);
-			if ((en_de.compare("E") == 0) || (en_de.compare("D") == 0))
-				break;
-			else
+			switch (cs_method[a])
 			{
-				std::cout << "You must only either type \"E\" or \"D\"" << std::endl;
-				std::cout << "Type \"D\" for decode and \"E\" for encode" << std::endl;
+			case '0':
+				break;
+			case '1':
+				break;
+			case '2':
+				break;
+			case '3':
+				break;
+			case '4':
+				break;
+			case '5':
+				break;
+			case '6':
+				break;
+			case '7':
+				break;
+			case '8':
+				break;
+			case '9':
+				break;
+			default:
+				moveOn = true;
+				break;
 			}
-		} while (true);
-	}
-
-	//Converting phase
+			if (moveOn)
+				break;
+		}
+		if(moveOn)
+			std::cout << "Enter a valid methodod ID" << std::endl;
+	} while (moveOn);
+	int z = 0;
+	int y = 0;
+	int x;
+	method = 0;
+	for (int a = s_method.length() - 1; a >= 0; a--)
 	{
-		if (en_de.compare("E") == 0)
-			mode = 0;
-		else if (en_de.compare("D") == 0)
-			mode = 1;
-	indexConv:
-		cs_string = new char[s_index.length() + 1];
-		cs_string = s_index.c_str();
-
-		/*
-		switches from the 100's digit to the ones digit
-		*/
-
-		//first digit switch
-		if (s_index.length() == 2)
+		y = 1;
+		for (int b = 0; z > b; b++)
+			y *= 10;
+		switch (cs_method[a])
 		{
-			switch (s_index[1])
-			{
-			case '1':
-				index = 1;
-				break;
-			case '2':
-				index = 2;
-				break;
-			case '3':
-				index = 3;
-				break;
-			case '4':
-				index = 4;
-				break;
-			case '5':
-				index = 5;
-				break;
-			case '6':
-				index = 6;
-				break;
-			case '7':
-				index = 7;
-				break;
-			case '8':
-				index = 8;
-				break;
-			case '9':
-				index = 9;
-				break;
-			case '0':
-				index = 0;
-				break;
-			default:
-				back = true;
-				std::cout << "The index you enter must be a NUMBER. Please retry" << std::endl;
-				goto enterIndex;
-			}
-			switch (s_index[0])
-			{
-			case '-':
-				index *= -1;
-				break;
-			case '1':
-				index += 10;
-				break;
-			case '2':
-				index += 20;
-				break;
-			case '3':
-				index += 30;
-				break;
-			case '4':
-				index += 40;
-				break;
-			case '5':
-				index += 50;
-				break;
-			case '6':
-				index += 60;
-				break;
-			case '7':
-				index += 70;
-				break;
-			case '8':
-				index += 80;
-				break;
-			case '9':
-				index += 90;
-				break;
-			case '0':
-				break;
-			default:
-				back = true;
-				std::cout << "Must enter a NUMBER as index. Please reenter an index." << std::endl;
-				goto enterIndex;
-			}
+		case '1':
+			x = 1;
+			break;
+		case '2':
+			x = 2;
+			break;
+		case '3':
+			x = 3;
+			break;
+		case '4':
+			x = 4;
+		case '5':
+			x = 5;
+			break;
+		case '6':
+			x = 6;
+			break;
+		case '7':
+			x = 7;
+			break;
+		case '8':
+			x = 8;
+			break;
+		case '9':
+			x = 9;
+			break;
+		case '0':
+			x = 0;
+			break;
+		default:
+			std::cout << "Enter a valid methodod ID" << std::endl;
+			goto methododCreation;
 		}
-
-		//second digit switch
-		if (s_index.length() == 1)
-		{
-			switch (s_index[0])
-			{
-			case '-':
-				index *= -1;
-				break;
-			case '1':
-				index += 1;
-				break;
-			case '2':
-				index += 2;
-				break;
-			case '3':
-				index += 3;
-				break;
-			case '4':
-				index += 4;
-				break;
-			case '5':
-				index += 5;
-				break;
-			case '6':
-				index += 6;
-				break;
-			case '7':
-				index += 7;
-				break;
-			case '8':
-				index += 8;
-				break;
-			case '9':
-				index += 9;
-				break;
-			case '0':
-				break;
-			default:
-				back = true;
-				std::cout << "Must enter a NUMBER as index. Please reenter an index." << std::endl;
-				goto enterIndex;
-			}
-		}
-		//delete[s_index.length() + 1] cs_string;
-		back = false;
+		method += x * y;
+		z++;
 	}
+	if (!(method == 1))
+	{
+		std::cout << "Enter a valid methodod ID" << std::endl;
+		goto methododCreation;
+	}
+	moveOn = true;
+	std::cout << "Enter file name" << std::endl;
+	do
+	{
+		std::getline(std::cin, fileName);
+		fileLoc = "input\\" + fileName;
+		if (OpenFile((LPCSTR)fileLoc.c_str(), &fileStruct, OF_EXIST) != HFILE_ERROR)
+			break;
+		std::cout << "Please enter a valid file name reletive to the input directory" << std::endl;
+	} while (true);
+	std::cout << "Enter mode (type \"D\" for decode and \"E\" for encode)" << std::endl;
+	do
+	{
+		std::getline(std::cin, en_de);
+		if ((en_de.compare("E") == 0) || (en_de.compare("D") == 0))
+			break;
+		else
+		{
+			std::cout << "You must only either type \"E\" or \"D\"" << std::endl;
+			std::cout << "Type \"D\" for decode and \"E\" for encode" << std::endl;
+		}
+	} while (true);
+	if (en_de.compare("E") == 0)
+		mode = (unsigned char)_ENCODE_;
+	else if (en_de.compare("D") == 0)
+	{
+		char* extention = new char[4];
+		const char* cs_fileName = fileName.c_str();
+		z = 4;
+		mode = (unsigned char)_DECODE_;
+		for (int a = 0; a < fileName.length(); a++)
+		{
+			extention[a] = cs_fileName[fileName.length() - z];
+			z--;
+		}
+		if (!(extention[0] == '.'))
+		{
+			std::cout << "Your file format does not support the decoding of files. Please restart the program and try again." << std::endl;
+			system("pause");
+			return -1;
+		}
+		else if (!(extention[1] == 'b'))
+		{
+			std::cout << "Your file format does not support the decoding of files. Please restart the program and try again." << std::endl;
+			system("pause");
+			return -1;
+		}
+		else if (!(extention[2] == 'f'))
+		{
+			std::cout << "Your file format does not support the decoding of files. Please restart the program and try again." << std::endl;
+			system("pause");
+			return -1;
+		}
+		else if (!(extention[3] == 'e'))
+		{
+			std::cout << "Your file format does not support the decoding of files. Please restart the program and try again." << std::endl;
+			system("pause");
+			return -1;
+		}
+	}
+		
 
 	//Computing phase (Done in other functions)
-	std::string output_t = "output//";
 	int dummy = fileExtract(fileLoc.c_str(), interFileBuf, interFileLength);
 	if (dummy == -1)
 	{
@@ -228,33 +206,49 @@ int main()
 		system("pause");
 		return -1;
 	}
-	switch (mode)
+	switch (method)
 	{
-	case 0:
-		encoder(interFileBuf, finalFileBuf, interFileLength, index);
-		break;
 	case 1:
-		decoder(interFileBuf, finalFileBuf, interFileLength, index);
+		SC_setup(interFileBuf, interFileLength, mode, finalFileBuf, finalFileLength, fileName.c_str(), fileName.length(), outputName, nameLength);
 		break;
 	default:
-		std::cout << "The index you have entered has been lost or invalid." << std::endl;
+		std::cout << "Your encription methodod has been lost. Please restart your program" << std::endl;
 		system("pause");
 		return -1;
 	}
-	fileLoc = output_t + fileName;
-	finalFileLength = interFileLength;
+	delete[] interFileBuf;
+	if (mode == _ENCODE_)
+	{
+		std::cout << "Enter the output file's name" << std::endl;
+		std::getline(std::cin, fileName);
+		fileLoc = "output//" + fileName + ".bfe";
+	}
+	else if (mode == _DECODE_)
+	{
+		std::string output__(outputName, nameLength);
+		fileLoc = "output\\" + output__;
+	}
+	else
+	{
+		std::cout << "The mode you have entered has been lost. Please restart the program and try again" << std::endl;
+		system("pause");
+		return -1;
+	}
+	
 	dummy = fileWritter(fileLoc.c_str(), finalFileBuf, finalFileLength);
 	if (dummy == 1)
-		{
-			system("pause");
-			return -1;
-		}
+	{
+		system("pause");
+		return -1;
+	}
 	else if (dummy == -1)
 	{
 		std::cout << "An error has occured." << std::endl;
 		system("pause");
 		return -1;
 	}
+	delete[] finalFileBuf;
+	delete[] outputName;
 	std::cout << "100% proccessed. Your new file is in the \"output\" directory which is in the program's directory" << std::endl;
 	system("pause");
 	return 0;

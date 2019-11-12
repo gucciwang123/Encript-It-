@@ -4,12 +4,12 @@ Windows.h
 */
 #include "headers/pch.h"
 
-int fileExtract(const char* location, unsigned char*& fileBuffer,unsigned long& bufferLength)//location of file, 
+int fileExtract(const char* location, unsigned char*& fileBuffer, unsigned long long& bufferLength)
 {
 	//variable decoration
 	unsigned char* fileContents;
 	HANDLE hFile;
-	__int64 size;
+	unsigned long long size;
 	unsigned long readBytes;
 	LARGE_INTEGER L_size;
 
@@ -31,12 +31,11 @@ int fileExtract(const char* location, unsigned char*& fileBuffer,unsigned long& 
 	return 0;
 }
 
-int fileWritter(const char* name, unsigned char* fileBuffer, unsigned long bufferLength)
+int fileWritter(const char* name, unsigned char* fileBuffer, unsigned long long bufferLength)
 {
 	//variable decoration
 	HANDLE hFile;
 	unsigned long writeBytes;
-	LARGE_INTEGER L_size;
 
 	hFile = CreateFile(name, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (hFile == INVALID_HANDLE_VALUE)

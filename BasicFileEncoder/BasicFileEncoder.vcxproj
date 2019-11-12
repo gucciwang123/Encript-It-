@@ -76,8 +76,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>Encode It!</TargetName>
-    <OutDir>$(SolutionDir)\bin\$(Configuration)\$(Platform)\</OutDir>
-    <IntDir>$(SolutionDir)\bin\intermediate\$(Configuration)\$(Platform)\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediate\$(Configuration)\$(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)\bin\$(Configuration)\$(Platform)\</OutDir>
@@ -85,8 +85,8 @@
     <TargetName>Encode It!</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)\bin\$(Configuration)\$(Platform)\</OutDir>
-    <IntDir>$(SolutionDir)\bin\intermediate\$(Configuration)\$(Platform)\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediate\$(Configuration)\$(Platform)\</IntDir>
     <TargetName>Encode It!</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -146,10 +146,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\decoder.cpp" />
-    <ClCompile Include="src\encoder.cpp" />
     <ClCompile Include="src\FileManager.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\passwordEncrypt.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -160,11 +159,11 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">headers\pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">headers\pch.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="src\shiftCode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="src\headers\decoder.h" />
-    <ClInclude Include="src\headers\encoder.h" />
+    <ClInclude Include="src\headers\encryptionTech.h" />
     <ClInclude Include="src\headers\FileManager.h" />
     <ClInclude Include="src\headers\pch.h" />
   </ItemGroup>
@@ -173,6 +172,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Templates\EncryptTemplate.tem" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
